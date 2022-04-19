@@ -1,4 +1,8 @@
 # ergonomic_assessment
+This repo provides vision-based real-time ergonomic feedback based on the [Rapid Upper Limb Assessment (RULA)](https://doi.org/10.1016/0003-6870(93)90080-S).
+Based on body tracking data, we calculate all relevant joint angles and use them to compute RULA scores.
+
+# Demo
 ![screenshot](./RULA_demo.png)
 
 # Installation
