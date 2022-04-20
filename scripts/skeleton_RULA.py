@@ -46,7 +46,6 @@ class Skeleton():
         self.header = Header()
         self.header.frame_id = "kinect2_depth_camera_link"
         self.rula = [0,0,0,0,0,0,0,0,0,0,0,0]
-        self.score_array = np.empty(1)
 	
 
 
@@ -166,7 +165,6 @@ class Skeleton():
         self.rula = data.data
 
 
-
     def publishSkeleton(self):
         msg = MarkerArray()
         # A) Neck, Trunk, Legs
@@ -185,8 +183,6 @@ class Skeleton():
         lower_leg_left_list  = self.createListMsg(self.knee_left, self.ankle_left, "lower_leg_left", color=self.scoreToColor(self.rula[6]/4.0))
         lower_leg_right_list  = self.createListMsg(self.knee_right, self.ankle_right, "lower_leg_right", color=self.scoreToColor(self.rula[7]/4.0))
 
-
-
         # B) Arm and Wrist
         upper_arm_left_list = self.createListMsg(self.shoulder_left, self.elbow_left, "upper_arm_left", color=self.scoreToColor(self.rula[0]/6.0))
         upper_arm_right_list = self.createListMsg(self.shoulder_right, self.elbow_right, "upper_arm_right", color=self.scoreToColor(self.rula[1]/6.0))
@@ -202,7 +198,6 @@ class Skeleton():
         wrist_right_list = self.createListMsg(self.wrist_right, self.hand_right, "wrist_right", color=self.scoreToColor(self.rula[9]/4.0))
 
         msg = [neck_list,shoulder_left_list, shoulder_right_list, upper_arm_left_list, upper_arm_right_list, lower_arm_left_list, lower_arm_right_list, wrist_left_list, wrist_right_list, trunk_list, trunk_list2, trunk_list3, trunk_list4, upper_leg_left_list, upper_leg_right_list, lower_leg_left_list, lower_leg_right_list]
-        #msg.append(self.head)
 
         # Add TEXT
         msg.append(self.createTextMsg("Neck Score: "+str(int(self.rula[4])), "neck_score", y=-1, color=self.scoreToColor(int(self.rula[4])/6.0)))
@@ -212,30 +207,8 @@ class Skeleton():
         msg.append(self.createTextMsg("Wrist Score: "+str(int(max(self.rula[8], self.rula[9]))), "wrist_score", color=self.scoreToColor(int(max(self.rula[8], self.rula[9]))/4.0), y=-0.2))
         msg.append(self.createTextMsg("Leg Score: "+str(int(max(self.rula[6], 1))), "leg_score", color=self.scoreToColor(int(max(self.rula[6], self.rula[7]))/4.0), y=-0.0))
 
-        mean = np.mean(self.rula) * 3
-        reba_score = self.rula[10]
-        msg.append(self.createTextMsg("RULA Score: "+str(int(reba_score)), "rula_score", color=self.scoreToColor(reba_score/7.0), y=+0.3, scale=0.25))
+        msg.append(self.createTextMsg("RULA Score: "+str(int(self.rula[10])), "rula_score", color=self.scoreToColor(self.rula[10]/7.0), y=+0.3, scale=0.25))
         msg.append(self.createTextMsg("Confidence: "+str(round(self.rula[11],2)), "rula_conf", color=self.scoreToColor(1.0-self.rula[11]**2), y=+0.5, scale=0.1))
-
-
-        # exponential smoothing
-        #self.l_t = self.alpha * reba_score + (1.0 - self.alpha) * self.l_t
-
-        # mean REBA score of the last x_ minutes
-        mean_minutes = 5 # mean of the last 5 min
-        _x = int(mean_minutes * 60 * 15)
-        if (len(self.score_array) < _x):
-            # append to array at the beginning
-             self.score_array = np.concatenate((self.score_array, np.array([reba_score])), axis=0)
-        else:
-            # array is filled, now shift it
-            self.score_array = np.roll(self.score_array, 1)
-            self.score_array[0] = reba_score
-
-
-
-        mean = np.mean(self.score_array)
-        #msg.append(self.createTextMsg("Mean REBA Score: "+str(int(mean)), "reba_score_smooth", color=self.scoreToColor(int(mean)/12.0), y=+0.6, scale=0.25))
 
         self.pubSkeleton.publish(msg)
 
