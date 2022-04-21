@@ -340,7 +340,6 @@ class Ergonomy():
         imu_vector = rospack.get_path('ergonomic_assessment') + '/imu/vertical_vector.txt'
         self.vertical_vector = np.loadtxt(imu_vector)
         #self.vertical_vector = np.loadtxt("/shared/vertical_vector.txt")
-        self.filename = "rula_data_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
         header = np.array(["time", "rula_score", "rula_base_score", "rula_confidence",
                                     "neck_score", "neck_base_score", "neck_confidence",
                                     "trunk_score", "trunk_base_score", "trunk_confidence",
@@ -351,6 +350,15 @@ class Ergonomy():
                                     "lower_arm_right_score", "lower_arm_right_base_score", "lower_arm_right_confidence",
                                     "wrist_left_score", "wrist_left_base_score", "wrist_left_confidence",
                                     "wrist_right_score", "wrist_right_base_score", "wrist_right_confidence"])
+        
+        path = rospack.get_path('ergonomic_assessment') + "/data/"      #default file path
+        if not os.path.exists(path):     #creates target folder if it doesn't exists
+            os.makedirs(path)
+        
+        #path = "/home/chris/catkin_ws/"        #alternatively define a custom file path
+
+        self.filename = path + "rula_data_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+        
         with open(self.filename, 'w') as f:
                 np.savetxt(f, [header], fmt='%s', delimiter=' ')
         self.neck = Score(0, 0, 0, 0)
