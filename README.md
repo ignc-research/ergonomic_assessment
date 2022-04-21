@@ -15,6 +15,6 @@ Start ROS via ``roslaunch ergonomic_assessment rula.launch``
 
 
 # Use Rosbags
-To use recorded rosbags, run ``rosbag play '/path/rosbag.bag' --loop``
+To use recorded rosbags, run ``rosbag play './rosbags/body_tracking_data.bag' --loop``
 
 
