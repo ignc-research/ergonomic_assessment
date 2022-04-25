@@ -247,7 +247,7 @@ def lower_arm_score(angle):
     elif (60 <= angle < 100):
         return 1
 
-def midline_in(same_side, other_side):
+def midline(same_side, other_side):
     """check if lower arm is working across midline of the body"""
     conf = calc_conf([other_side.confidence, same_side.confidence])
     if (other_side.distance < same_side.distance):
@@ -255,7 +255,7 @@ def midline_in(same_side, other_side):
     else:
         return Score(0*conf, conf, 0, None)
 
-def midline_out(angle):
+def outward(angle):
     """check if lower arm is working out to the side of the body"""
     if (100 < angle):
         return 1
@@ -265,11 +265,11 @@ def midline_out(angle):
 def midline_score(shoulder_left, shoulder_right, elbow_left, elbow_right, wrist_left, wrist_right):
     """lower arm working across the midline of the body or out to the side"""
     out_left_angle = angle_relative(get_joint(shoulder_right), get_joint(shoulder_left), get_joint(wrist_left), get_joint(elbow_left), 0)
-    out_left = Score(midline_out(out_left_angle.angle)*out_left_angle.confidence, out_left_angle.confidence, midline_out(out_left_angle.angle), out_left_angle.angle)
+    out_left = Score(outward(out_left_angle.angle)*out_left_angle.confidence, out_left_angle.confidence, outward(out_left_angle.angle), out_left_angle.angle)
     out_right_angle = angle_relative(get_joint(shoulder_left), get_joint(shoulder_right), get_joint(wrist_right), get_joint(elbow_right), 0)
-    out_right = Score(midline_out(out_right_angle.angle)*out_right_angle.confidence, out_right_angle.confidence, midline_out(out_right_angle.angle), out_right_angle.angle)
-    in_left = midline_in(calc_distance(get_joint(wrist_left), get_joint(shoulder_left)), calc_distance(get_joint(wrist_left), get_joint(shoulder_right)))
-    in_right = midline_in(calc_distance(get_joint(wrist_right), get_joint(shoulder_right)), calc_distance(get_joint(wrist_right), get_joint(shoulder_right)))
+    out_right = Score(outward(out_right_angle.angle)*out_right_angle.confidence, out_right_angle.confidence, outward(out_right_angle.angle), out_right_angle.angle)
+    in_left = midline(calc_distance(get_joint(wrist_left), get_joint(shoulder_left)), calc_distance(get_joint(wrist_left), get_joint(shoulder_right)))
+    in_right = midline(calc_distance(get_joint(wrist_right), get_joint(shoulder_right)), calc_distance(get_joint(wrist_right), get_joint(shoulder_right)))
     left = Score(max(out_left.score, in_left.score), calc_conf([out_left.confidence, in_left.confidence]), max(out_left.base_score, in_left.base_score), None)
     right = Score(max(out_right.score, in_right.score), calc_conf([out_right.confidence, in_right.confidence]), max(out_right.base_score, in_right.base_score), None)
     return [left, right]
