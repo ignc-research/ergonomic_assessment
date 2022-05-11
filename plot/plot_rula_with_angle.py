@@ -1,9 +1,19 @@
+from email.mime import base
 import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from matplotlib import gridspec
+
+def dif_percent(score, base_score, label):
+    counter = 0
+    for i in range(len(score)):
+        if(score[i] != base_score[i]):
+            counter += 1
+
+    percent = (counter / len(score)) * 100
+    print ('{} : {}%'.format(label.removesuffix(' Punktzahl'), percent))
 
 def plotting_tool(time, score, base_score, conf, label, file):
     sns.set_style("whitegrid")
@@ -12,13 +22,14 @@ def plotting_tool(time, score, base_score, conf, label, file):
     blue = palette[0]
     red=palette[3]
 
+    dif_percent(score, base_score, label)
+
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(2, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
     ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
     ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
     ax0.set_ylim(ymin=1)
-
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     ax1.plot(time, conf, lw=0.8, color=palette[7])
@@ -50,6 +61,15 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
     palette = sns.color_palette("muted")
     blue = palette[0]
     red=palette[3]
+
+    #round Scores to whole number and limit to a minimum of 1
+    for i in range(len(score)):
+        if (score[i] < 1):
+            score[i] = 1
+        else:
+            score[i] = int(round(score[i]))        
+
+    dif_percent(score, base_score, label)
 
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(3, 1, hspace=0.05)
@@ -101,6 +121,8 @@ def plot_rula():
     if not os.path.exists(folder):
         os.makedirs(folder)
     
+    print('Unterschiede zwischen Punktzahl mit Gewichtung und ohne Gewichtung (in Prozent):')
+
     rula_score = rula[:,1]
     rula_base_score = rula[:,2]
     rula_conf = rula[:,3]
