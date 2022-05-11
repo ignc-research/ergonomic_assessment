@@ -1,3 +1,4 @@
 .vscode
 data
 plot/rula_plots*
+.DS_Store
