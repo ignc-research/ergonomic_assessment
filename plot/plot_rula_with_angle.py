@@ -15,7 +15,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(2, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
-    ax0.plot(time, score, lw=0.8, color=blue, label="Mit Gewichtung nach Konfidenz")
+    ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
     ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
     ax0.set_ylim(ymin=1)
 
@@ -54,7 +54,7 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(3, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
-    ax0.plot(time, score, lw=0.8, color=blue, label="Mit Gewichtung nach Konfidenz")
+    ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
     ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
     ax0.set_ylim(ymin=0)
     ax0.legend(loc="upper left", fontsize=8)
