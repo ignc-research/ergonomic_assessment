@@ -7,15 +7,17 @@ import seaborn as sns
 from matplotlib import gridspec
 
 def dif_percent(score, base_score, label):
+    """calculate procentual difference between score and base score"""
     counter = 0
     for i in range(len(score)):
         if(score[i] != base_score[i]):
             counter += 1
 
     percent = (counter / len(score)) * 100
-    print ('{} : {}%'.format(label.removesuffix(' Punktzahl'), percent))
+    print ('{} : {}%'.format(label, percent))
 
 def plotting_tool(time, score, base_score, conf, label, file):
+    """plot score, base score and confidence"""
     sns.set_style("whitegrid")
 
     palette = sns.color_palette("muted")
@@ -27,14 +29,23 @@ def plotting_tool(time, score, base_score, conf, label, file):
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(2, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
-    ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
-    ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
+    
+    # ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
+    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
+    # ax0.fill_between(time, score, alpha=0.2)
+    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")    #plot with steps
+    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=0.8, color=red, label="Ohne Konfidenz")    #plot with steps
+    ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
+
     ax0.set_ylim(ymin=1)
+    ax0.legend(loc="upper left", fontsize=8)
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
-    ax1.plot(time, conf, lw=0.8, color=palette[7])
+    
+    # ax1.plot(time, conf, lw=0.8, color=palette[7])
+    ax1.plot(time, conf, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
+    
     ax1.set_ylim(ymax=1)
-    ax0.legend(loc="upper left", fontsize=8)
 
     plt.setp(ax0.get_xticklabels(), visible=False)
 
@@ -48,14 +59,14 @@ def plotting_tool(time, score, base_score, conf, label, file):
     ax1.xaxis.grid(which='minor') # vertical lines
     ax0.minorticks_on()
     ax0.grid('on')
-    ax1.grid('on')
-    l = ax0.fill_between(time, score, alpha=0.2)
-
+    ax1.grid('on')    
+    
     ax0.margins(x=0)
 
     fig.savefig(file + '.png')
 
 def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
+    """plot score, base score, confidence and angle"""
     sns.set_style("whitegrid")
 
     palette = sns.color_palette("muted")
@@ -74,17 +85,29 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
     fig = plt.figure(figsize=(15, 7), dpi=100)
     gs = gridspec.GridSpec(3, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
-    ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
-    ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
+    
+    # ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
+    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
+    # ax0.fill_between(time, score, alpha=0.2)
+    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")    #plot with steps
+    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=0.8, color=red, label="Ohne Konfidenz")    #plot with steps
+    ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
+   
+    ax0.margins(x=0)
     ax0.set_ylim(ymin=0)
     ax0.legend(loc="upper left", fontsize=8)
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
-    ax1.plot(time, conf, lw=0.8, color=palette[7])
+    
+    # ax1.plot(time, conf, lw=0.8, color=palette[7])
+    ax1.plot(time, conf, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
+    
     ax1.set_ylim(ymax=1.05)
     
     ax2 = fig.add_subplot(gs[2], sharex=ax0)
-    ax2.plot(time, angle, lw=0.8, color=palette[7])
+    
+    # ax2.plot(time, angle, lw=0.8, color=palette[7])
+    ax2.plot(time, angle, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
     
     plt.setp(ax0.get_xticklabels(), visible=False)
     plt.setp(ax1.get_xticklabels(), visible=False)
@@ -104,24 +127,21 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
     ax0.grid('on')
     ax1.grid('on')
     ax2.grid('on')
-    l = ax0.fill_between(time, score, alpha=0.2)
-
-    ax0.margins(x=0)
 
     fig.savefig(file + '.png')
 
 def plot_rula():
 
-    rula = np.loadtxt("../data/rula_data_20220506_014429.csv", delimiter=' ', skiprows=1)
+    rula = np.loadtxt("../data/psa_worst_case.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
     time = rula[:,0]
-    time = (time - time[0])
+    time = (time - time[0])     #time relative to first entry
     time = [round(elem, 2) for elem in time]
 
-    folder = "rula_plots_"+datetime.now().strftime("%Y%m%d_%H%M%S")+"/"
-    if not os.path.exists(folder):
+    folder = "rula_plots_"+datetime.now().strftime("%Y%m%d_%H%M%S")+"/"     #unique folder names
+    if not os.path.exists(folder):      #creates target folder if it doesn't exists
         os.makedirs(folder)
     
-    print('Unterschiede zwischen Punktzahl mit Gewichtung und ohne Gewichtung (in Prozent):')
+    print('Unterschiede zwischen Punktzahl mit Gewichtung und ohne Gewichtung (in Prozent):')       #first terminal line for dif_percent
 
     rula_score = rula[:,1]
     rula_base_score = rula[:,2]
