@@ -122,7 +122,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
 def plot_rula():
 
-    rula = np.loadtxt("../data/psa_worst_case.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
+    rula = np.loadtxt("../data/data_for_plot.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
     time = rula[:,0]
     time = (time - time[0])     #time relative to first entry
     time = [round(elem, 2) for elem in time]
