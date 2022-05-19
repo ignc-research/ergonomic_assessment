@@ -200,8 +200,8 @@ class Skeleton():
         msg = [neck_list,shoulder_left_list, shoulder_right_list, upper_arm_left_list, upper_arm_right_list, lower_arm_left_list, lower_arm_right_list, wrist_left_list, wrist_right_list, trunk_list, trunk_list2, trunk_list3, trunk_list4, upper_leg_left_list, upper_leg_right_list, lower_leg_left_list, lower_leg_right_list]
 
         # Add TEXT
-        msg.append(self.createTextMsg("Neck Score: "+str(int(self.rula[4])), "neck_score", y=-1, color=self.scoreToColor(int(self.rula[4])/6.0)))
-        msg.append(self.createTextMsg("Trunk Score: "+str(int(self.rula[5])), "trunk_score", y=-0.8, color=self.scoreToColor(int(self.rula[5])/6.0)))
+        msg.append(self.createTextMsg("Neck Score: "+str(int(max(1,self.rula[4]))), "neck_score", y=-1, color=self.scoreToColor(int(self.rula[4])/6.0)))
+        msg.append(self.createTextMsg("Trunk Score: "+str(int(max(1,self.rula[5]))), "trunk_score", y=-0.8, color=self.scoreToColor(int(self.rula[5])/6.0)))
         msg.append(self.createTextMsg("Upper Arm Score: "+str(int(max(self.rula[0], self.rula[1]))), "upper_arm_score", color=self.scoreToColor(int(max(self.rula[0], self.rula[1]))/6.0), y=-0.6))
         msg.append(self.createTextMsg("Lower Arm Score: "+str(int(max(self.rula[2], self.rula[3]))), "lower_arm_score", color=self.scoreToColor(int(max(self.rula[2], self.rula[3]))/4.0), y=-0.4))
         msg.append(self.createTextMsg("Wrist Score: "+str(int(max(self.rula[8], self.rula[9]))), "wrist_score", color=self.scoreToColor(int(max(self.rula[8], self.rula[9]))/4.0), y=-0.2))
