@@ -3,7 +3,7 @@ This repo provides vision-based real-time ergonomic feedback based on the [Rapid
 Based on body tracking data, we calculate all relevant joint angles and use them to compute RULA scores.
 
 # Demo Video
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/GOXe7FzxO5g/0.jpg)]([https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE](https://www.youtube.com/watch?v=GOXe7FzxO5g))
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/GOXe7FzxO5g/0.jpg)](https://www.youtube.com/watch?v=GOXe7FzxO5g)
 
 # Installation
 Clone this ROS package into your catkin_ws/src folder.
