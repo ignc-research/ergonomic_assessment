@@ -46,7 +46,6 @@ class Skeleton():
         self.header = Header()
         self.header.frame_id = "kinect2_depth_camera_link"
         self.rula = [0,0,0,0,0,0,0,0,0,0,0,0]
-	
 
 
     def colorToConfidence(self, color):
@@ -75,6 +74,7 @@ class Skeleton():
         else:
             return riskColor["high"]
 
+
     def createListMsg(self, joint1, joint2, ns, color=(35/255.0, 127/255.0, 82/255.0)):
         """ Create a LINE_LIST from two joints. Returns Marker-msg """
         listMsg = Marker()
@@ -92,7 +92,12 @@ class Skeleton():
         listMsg.color.r = color[0]
         listMsg.color.g = color[1]
         listMsg.color.b = color[2]
-        listMsg.color.a = min(self.colorToConfidence(joint1.color),self.colorToConfidence(joint2.color))  # transparency = min confidence value
+        K = min(self.colorToConfidence(joint1.color),self.colorToConfidence(joint2.color))  # transparency = min confidence value
+        if K < 1:
+            transparency = 0.25
+        else:
+            transparency = 1.0
+        listMsg.color.a = transparency
 
         listMsg.points = [joint1.pose.position, joint2.pose.position]
 
@@ -208,7 +213,17 @@ class Skeleton():
         msg.append(self.createTextMsg("Leg Score: "+str(int(max(self.rula[6], 1))), "leg_score", color=self.scoreToColor(int(max(self.rula[6], self.rula[7]))/4.0), y=-0.0))
 
         msg.append(self.createTextMsg("RULA Score: "+str(int(self.rula[10])), "rula_score", color=self.scoreToColor(self.rula[10]/7.0), y=+0.3, scale=0.25))
-        msg.append(self.createTextMsg("Confidence: "+str(round(self.rula[11],2)), "rula_conf", color=self.scoreToColor(1.0-self.rula[11]**2), y=+0.5, scale=0.1))
+        msg.append(self.createTextMsg("Confidence: "+str(round(self.rula[11],2)), "rula_conf", color=self.scoreToColor(1.0-self.rula[11]**2), y=+0.45, scale=0.1))
+            
+        # 4 RULA action levels
+        if(self.rula[10] <= 2):
+            msg.append(self.createTextMsg("Acceptable posture", "rula_action_level", color=self.scoreToColor(0), y=+0.9, scale=0.2))
+        elif(self.rula[10] <= 4):
+            msg.append(self.createTextMsg("Posture changes may be required", "rula_action_level", color=self.scoreToColor(0.4), y=+0.9, scale=0.2))
+        elif(self.rula[10] <= 6):
+            msg.append(self.createTextMsg("Posture changes are required soon", "rula_action_level", color=self.scoreToColor(0.7), y=+0.9, scale=0.2))
+        else:
+            msg.append(self.createTextMsg("Posture changes are required immediately", "rula_action_level", color=self.scoreToColor(1), y=+0.9, scale=0.2))
 
         self.pubSkeleton.publish(msg)
 
@@ -220,6 +235,7 @@ def start():
     while not rospy.is_shutdown():
         node.publishSkeleton()
         r.sleep()
+
 
 if __name__ == '__main__':
     start()
