@@ -122,7 +122,7 @@ def neck_score(angle, angle_alt):
 
 def neck_twist_score(angle):
     """is neck twisted?"""
-    if ((angle < (90-15)) or ((90+15) < angle)):
+    if ((angle < 75) or (105 < angle)):
         return 1
     else:
         return 0
