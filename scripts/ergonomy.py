@@ -129,7 +129,7 @@ def neck_twist_score(angle):
 
 def neck_bend_score(angle):
     """is neck side bending"""
-    if ((angle < 80) or (100 < angle)):
+    if ((angle <= 82) or (98 <= angle)):
         return 1
     else:
         return 0
@@ -147,9 +147,9 @@ def neck_evaluation(spine_chest, neck, nose, ear_left, ear_right, shoulder_left,
 
 def trunk_score(angle):
     """return score based on trunk position"""
-    if (angle == 0):
+    if (angle <= 7):
         return 1
-    elif (0 < angle <= 20):
+    elif (7 < angle <= 20):
         return 2
     elif (20 < angle <= 60):
         return 3
@@ -217,7 +217,7 @@ def shoulder_score(angle):
 
 def abduction_score(angle):
     """is arm abducted?"""
-    if (angle < 135):
+    if (angle < 125):
         return 0
     else:
         return 1
@@ -287,10 +287,11 @@ def lower_arm_evaluation(elbow_left, elbow_right, shoulder_left, shoulder_right,
 
 def wrist_score(angle):
     """return score based on wrist position"""
-    if (0 <= angle < 25):
+    #tracking is not reliable enough so always returns 1
+    if (0 <= angle < 60):
         return 1
-    elif (25 <= angle):
-        return 2
+    elif (60 <= angle):
+        return 1
 
 def wrist_evaluation(elbow_left, elbow_right, wrist_left, wrist_right, hand_left, hand_right):
     """return wrist score"""
