@@ -12,7 +12,7 @@ from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 # 0: default behaviour. average used through whole process
 # 1: minimum used for all subscores
 # 2: simple average. average confidence of all joints multiplied with rula score
-conf_variant = 2
+conf_variant = 0
 
 def angle_relative(a, b, c, d, adjust):
     """return angle between two vectors"""
@@ -58,9 +58,7 @@ def get_joint(a):
 
 def calc_conf(a):
     """calculate confidence value"""
-    if (conf_variant % 2 == 0):
-        return calc_conf_avg(a)
-    elif (conf_variant % 2 == 1):
+    if (conf_variant == 1):
         return calc_conf_min(a)
     else:
         return calc_conf_avg(a)
