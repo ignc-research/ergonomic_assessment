@@ -386,6 +386,7 @@ class Ergonomy():
         self.rula_score = Score(0, 0, 0, 0)
         rospy.Subscriber("/kinect2/body_tracking_data", MarkerArray, self.callback)
         self.pub = rospy.Publisher('/ergonomics/rula', Float32MultiArray, queue_size=1)
+        self.pub_joint_angles = rospy.Publisher('/ergonomics/joint_angles', Float32MultiArray, queue_size=1)
 
     def createMultiArray(self,data):
         msg = Float32MultiArray()
@@ -474,7 +475,10 @@ class Ergonomy():
                     np.savetxt(f, [rula], fmt='%1.8f', delimiter=' ')
 
             score_msg = self.createMultiArray([self.upper_arm_left.score, self.upper_arm_right.score, self.lower_arm_left.score, self.lower_arm_right.score, self.neck.score, self.trunk.score, self.legs.score, self.legs.score, self.wrist_left.score, self.wrist_right.score, self.rula_score.score, self.rula_score.confidence])
+            joint_angle_msg = self.createMultiArray([self.upper_arm_left.angle, self.upper_arm_right.angle, self.lower_arm_left.angle, self.lower_arm_right.angle, self.neck.angle, self.trunk.angle, self.legs.angle, self.wrist_left.angle, self.wrist_right.angle])
+
             self.pub.publish(score_msg)
+            self.pub_joint_angles.publish(joint_angle_msg)
 
 def ergonomy_start():
     rospy.init_node('Ergonomy', anonymous=True)
