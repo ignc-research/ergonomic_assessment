@@ -14,6 +14,11 @@ from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 # 2: simple average. average confidence of all joints multiplied with rula score
 conf_variant = 0
 
+# save data to csv file 
+# 0: no 
+# 1: yes
+save_data = 0 
+
 def angle_relative(a, b, c, d, adjust):
     """return angle between two vectors"""
     ba = a.position - b.position
@@ -345,26 +350,27 @@ class Ergonomy():
         rospack = rospkg.RosPack()
         imu_vector = rospack.get_path('ergonomic_assessment') + '/imu/vertical_vector.txt'
         self.vertical_vector = np.loadtxt(imu_vector)
-        header = np.array(["time", "rula_score", "rula_base_score", "rula_confidence",
-                                    "neck_score", "neck_base_score", "neck_confidence", "neck_angle",
-                                    "trunk_score", "trunk_base_score", "trunk_confidence", "trunk_angle",
-                                    "legs_score", "legs_base_score", "legs_confidence", "legs_angle",
-                                    "upper_arm_left_score", "upper_arm_left_base_score", "upper_arm_left_confidence","upper_arm_left_angle",
-                                    "upper_arm_right_score", "upper_arm_right_base_score", "upper_arm_right_confidence", "upper_arm_right_angle",
-                                    "lower_arm_left_score", "lower_arm_left_base_score", "lower_arm_left_confidence", "lower_arm_left_angle",
-                                    "lower_arm_right_score", "lower_arm_right_base_score", "lower_arm_right_confidence", "lower_arm_right_angle",
-                                    "wrist_left_score", "wrist_left_base_score", "wrist_left_confidence", "wrist_left_angle",
-                                    "wrist_right_score", "wrist_right_base_score", "wrist_right_confidence", "wrist_right_angle"])
-        
-        path = rospack.get_path('ergonomic_assessment') + "/data/"      #default file path
-        if not os.path.exists(path):     #creates target folder if it doesn't exists
-            os.makedirs(path)
-        
-        #path = "/custom/file/path/"        #alternatively define a custom file path
+        if (save_data == 1):
+            header = np.array(["time", "rula_score", "rula_base_score", "rula_confidence",
+                                        "neck_score", "neck_base_score", "neck_confidence", "neck_angle",
+                                        "trunk_score", "trunk_base_score", "trunk_confidence", "trunk_angle",
+                                        "legs_score", "legs_base_score", "legs_confidence", "legs_angle",
+                                        "upper_arm_left_score", "upper_arm_left_base_score", "upper_arm_left_confidence","upper_arm_left_angle",
+                                        "upper_arm_right_score", "upper_arm_right_base_score", "upper_arm_right_confidence", "upper_arm_right_angle",
+                                        "lower_arm_left_score", "lower_arm_left_base_score", "lower_arm_left_confidence", "lower_arm_left_angle",
+                                        "lower_arm_right_score", "lower_arm_right_base_score", "lower_arm_right_confidence", "lower_arm_right_angle",
+                                        "wrist_left_score", "wrist_left_base_score", "wrist_left_confidence", "wrist_left_angle",
+                                        "wrist_right_score", "wrist_right_base_score", "wrist_right_confidence", "wrist_right_angle"])
+            
+            path = rospack.get_path('ergonomic_assessment') + "/data/"      #default file path
+            if not os.path.exists(path):     #creates target folder if it doesn't exists
+                os.makedirs(path)
+            
+            #path = "/custom/file/path/"        #alternatively define a custom file path
 
-        self.filename = path + "rula_data_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
-        with open(self.filename, 'w') as f:
-                np.savetxt(f, [header], fmt='%s', delimiter=' ')
+            self.filename = path + "rula_data_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+            with open(self.filename, 'w') as f:
+                    np.savetxt(f, [header], fmt='%s', delimiter=' ')
         
         self.neck = Score(0, 0, 0, 0)
         self.trunk = Score(0, 0, 0, 0)
@@ -451,20 +457,21 @@ class Ergonomy():
 
             print("Score: {} Base: {} Confidence: {}".format(self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence))
 
-            time = pelvis.header.stamp.secs + pelvis.header.stamp.nsecs * 10**-9
-            rula = np.array([time, self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence,
-                                    self.neck.score, self.neck.base_score, self.neck.confidence, self.neck.angle,
-                                    self.trunk.score, self.trunk.base_score, self.trunk.confidence, self.trunk.angle,
-                                    self.legs.score, self.legs.base_score, self.legs.confidence, self.legs.angle,
-                                    self.upper_arm_left.score, self.upper_arm_left.base_score, self.upper_arm_left.confidence, self.upper_arm_left.angle,
-                                    self.upper_arm_right.score, self.upper_arm_right.base_score, self.upper_arm_right.confidence, self.upper_arm_right.angle,
-                                    self.lower_arm_left.score, self.lower_arm_left.base_score, self.lower_arm_left.confidence, self.lower_arm_left.angle,
-                                    self.lower_arm_right.score, self.lower_arm_right.base_score, self.lower_arm_right.confidence, self.lower_arm_right.angle,
-                                    self.wrist_left.score, self.wrist_left.base_score, self.wrist_left.confidence, self.wrist_left.angle,
-                                    self.wrist_right.score, self.wrist_right.base_score, self.wrist_right.confidence, self.wrist_right.angle])
+            if (save_data == 1):
+                time = pelvis.header.stamp.secs + pelvis.header.stamp.nsecs * 10**-9
+                rula = np.array([time, self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence,
+                                        self.neck.score, self.neck.base_score, self.neck.confidence, self.neck.angle,
+                                        self.trunk.score, self.trunk.base_score, self.trunk.confidence, self.trunk.angle,
+                                        self.legs.score, self.legs.base_score, self.legs.confidence, self.legs.angle,
+                                        self.upper_arm_left.score, self.upper_arm_left.base_score, self.upper_arm_left.confidence, self.upper_arm_left.angle,
+                                        self.upper_arm_right.score, self.upper_arm_right.base_score, self.upper_arm_right.confidence, self.upper_arm_right.angle,
+                                        self.lower_arm_left.score, self.lower_arm_left.base_score, self.lower_arm_left.confidence, self.lower_arm_left.angle,
+                                        self.lower_arm_right.score, self.lower_arm_right.base_score, self.lower_arm_right.confidence, self.lower_arm_right.angle,
+                                        self.wrist_left.score, self.wrist_left.base_score, self.wrist_left.confidence, self.wrist_left.angle,
+                                        self.wrist_right.score, self.wrist_right.base_score, self.wrist_right.confidence, self.wrist_right.angle])
 
-            with open(self.filename, 'a') as f:
-                np.savetxt(f, [rula], fmt='%1.8f', delimiter=' ')
+                with open(self.filename, 'a') as f:
+                    np.savetxt(f, [rula], fmt='%1.8f', delimiter=' ')
 
             score_msg = self.createMultiArray([self.upper_arm_left.score, self.upper_arm_right.score, self.lower_arm_left.score, self.lower_arm_right.score, self.neck.score, self.trunk.score, self.legs.score, self.legs.score, self.wrist_left.score, self.wrist_right.score, self.rula_score.score, self.rula_score.confidence])
             self.pub.publish(score_msg)
