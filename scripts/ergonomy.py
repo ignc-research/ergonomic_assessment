@@ -12,7 +12,7 @@ from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 # 0: default behaviour. average used through whole process
 # 1: minimum used for all subscores
 # 2: simple average. average confidence of all joints multiplied with rula score
-conf_variant = 0
+conf_variant = 2
 
 # save data to csv file 
 # 0: no 
@@ -455,7 +455,7 @@ class Ergonomy():
                                             get_conf(spine_chest), get_conf(neck), get_conf(head), get_conf(nose), get_conf(ear_left), get_conf(ear_right),
                                             get_conf(knee_left), get_conf(knee_right), get_conf(ankle_left), get_conf(ankle_right), get_conf(elbow_left), get_conf(elbow_right), 
                                             get_conf(wrist_left), get_conf(wrist_right), get_conf(hand_left), get_conf(hand_right)])
-                self.rula_score.score = self.rula_score.base_score * conf_simple_avg
+                self.rula_score.score = int(round(self.rula_score.base_score * conf_simple_avg))
                 self.rula_score.confidence = conf_simple_avg
 
             print("Score: {} Base: {} Confidence: {}".format(self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence))
