@@ -1,5 +1,5 @@
 <launch>
-	<node name="reba" pkg="ergonomic_assessment" type="ergonomy.py" output="screen" />
+	<node name="rula" pkg="ergonomic_assessment" type="ergonomy.py" output="screen" />
 	<node name="skeleton" pkg="ergonomic_assessment" type="skeleton_RULA.py" output="screen" />
 	<node type="rviz" name="rviz_rula" pkg="rviz" args="-d $(find ergonomic_assessment)/rviz/rviz_cfg_rula.rviz" />
 
