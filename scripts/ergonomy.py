@@ -12,10 +12,10 @@ from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 # 0: default behaviour. average used through whole process
 # 1: minimum used for all subscores
 # 2: simple average. average confidence of all joints multiplied with rula score
-conf_variant = 2
+conf_variant = 0
 
 # save data to csv file 
-# 0: no 
+# 0: no (default)
 # 1: yes
 save_data = 0 
 
