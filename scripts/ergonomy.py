@@ -84,11 +84,13 @@ def get_conf(a):
         return 0.25
     elif (a.color.r == 0.0 and a.color.g == 1.0 and a.color.b == 0.0):
         return 1.0
+    else:
+        return 0
 
 def midpoint(l, r):
     """return midpoint between l and r"""
     pos = np.array([(l.position[0]+r.position[0])/2, (l.position[1]+r.position[1])/2, (l.position[2]+r.position[2])/2])
-    conf = (l.confidence + r.confidence)/2
+    conf = calc_conf([l.confidence, r.confidence])
     return Joint(pos, conf)
 
 def table_b(neck, legs, trunk):
