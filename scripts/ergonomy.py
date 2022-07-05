@@ -78,11 +78,11 @@ def calc_conf_min(a):
 
 def get_conf(a):
     """return confidence value"""
-    if (a.color.r == 1.0 and a.color.g == 0.0 and a.color.b == 0.0):
-        return 0
-    elif (a.color.r == 0.0 and a.color.g == 0.0 and a.color.b == 1.0):
+    if (a.color.r == 1.0 and a.color.g == 0.0 and a.color.b == 0.0):    #none/out of range
+        return 0.1
+    elif (a.color.r == 0.0 and a.color.g == 0.0 and a.color.b == 1.0):  #low
         return 0.25
-    elif (a.color.r == 0.0 and a.color.g == 1.0 and a.color.b == 0.0):
+    elif (a.color.r == 0.0 and a.color.g == 1.0 and a.color.b == 0.0):  #medium
         return 1.0
     else:
         return 0
