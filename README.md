@@ -8,7 +8,7 @@ Based on body tracking data, we calculate all relevant joint angles and use them
 # Installation
 Clone this forked ROS package into your catkin_ws/src folder.
 The package uses the topic \/body\_tracking\_data from the [Microsoft Azure Kinect ROS driver](https://github.com/leoneversberg/Azure_Kinect_ROS_Driver). 
-This cloned ROS driver version sets the body tracking marker according to the joint confidence value.
+This cloned ROS driver version sets the body tracking marker color according to the joint confidence value.
 
 
 # Launch ROS
