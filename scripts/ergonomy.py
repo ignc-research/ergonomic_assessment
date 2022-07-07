@@ -5,6 +5,7 @@ import os
 import rospy
 import rospkg
 import numpy as np
+from math import floor
 from visualization_msgs.msg import MarkerArray
 from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 
@@ -403,27 +404,33 @@ class Ergonomy():
     def callback(self, data):
         if (data.markers):
             #get all necessary joints
-            hip_left = next((x for x in data.markers if x.id % 100 == 18), None)
-            hip_right = next((x for x in data.markers if x.id % 100 == 22), None)
-            shoulder_left = next((x for x in data.markers if x.id % 100 == 5), None)
-            shoulder_right = next((x for x in data.markers if x.id % 100 == 12), None)
-            pelvis = next((x for x in data.markers if x.id % 100 == 0), None)
-            spine_chest = next((x for x in data.markers if x.id % 100 == 2), None)
-            neck = next((x for x in data.markers if x.id % 100 == 3), None)
-            head = next((x for x in data.markers if x.id % 100 == 26), None)
-            nose = next((x for x in data.markers if x.id % 100 == 27), None)
-            ear_left = next((x for x in data.markers if x.id % 100 == 29), None)
-            ear_right = next((x for x in data.markers if x.id % 100 == 31), None)
-            knee_left = next((x for x in data.markers if x.id % 100 == 19), None)
-            knee_right = next((x for x in data.markers if x.id % 100 == 23), None)
-            ankle_left = next((x for x in data.markers if x.id % 100 == 20), None)
-            ankle_right = next((x for x in data.markers if x.id % 100 == 24), None)
-            elbow_left = next((x for x in data.markers if x.id % 100 == 6), None)
-            elbow_right = next((x for x in data.markers if x.id % 100 == 13), None)
-            wrist_left = next((x for x in data.markers if x.id % 100 == 7), None)
-            wrist_right = next((x for x in data.markers if x.id % 100 == 14), None)
-            hand_left = next((x for x in data.markers if x.id % 100 == 8), None)
-            hand_right = next((x for x in data.markers if x.id % 100 == 15), None)
+            id_list = []
+            for msg in data.markers:
+                id = floor(msg.id / 100)
+                id_list.append(id) if id not in id_list else id_list
+            id = min(id_list) # always track the body with the minimum ID
+
+            hip_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 18), None)
+            hip_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 22), None)
+            shoulder_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 5), None)
+            shoulder_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 12), None)
+            pelvis = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 0), None)
+            spine_chest = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 2), None)
+            neck = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 3), None)
+            head = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 26), None)
+            nose = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 27), None)
+            ear_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 29), None)
+            ear_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 31), None)
+            knee_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 19), None)
+            knee_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 23), None)
+            ankle_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 20), None)
+            ankle_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 24), None)
+            elbow_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 6), None)
+            elbow_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 13), None)
+            wrist_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 7), None)
+            wrist_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 14), None)
+            hand_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 8), None)
+            hand_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == 15), None)
 
             #calculate individual scores
             self.neck = neck_evaluation(spine_chest, neck, nose, ear_left, ear_right, shoulder_left, shoulder_right)

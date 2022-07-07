@@ -2,6 +2,7 @@
 
 import rospy
 import numpy as np
+from math import floor
 from visualization_msgs.msg import MarkerArray, Marker
 from geometry_msgs.msg import Point
 from std_msgs.msg import Header, Float32MultiArray
@@ -134,32 +135,39 @@ class Skeleton():
     def callbackMarkerArray(self, data):
         """get all relevant joints"""
         if (data.markers):
-            self.head = next((x for x in data.markers if x.id % 100 == self.joints["HEAD"]), None)
-            self.neck = next((x for x in data.markers if x.id % 100 == self.joints["NECK"]), None)
-            self.spine_naval = next((x for x in data.markers if x.id % 100 == self.joints["SPINE_NAVAL"]), None)
-            self.pelvis = next((x for x in data.markers if x.id % 100 == self.joints["PELVIS"]), None)
+            id_list = []
+            for msg in data.markers:
+                id = floor(msg.id / 100)
+                id_list.append(id) if id not in id_list else id_list
+            id = min(id_list) # always track the body with the minimum ID
+
+
+            self.head = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["HEAD"]), None)
+            self.neck = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["NECK"]), None)
+            self.spine_naval = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["SPINE_NAVAL"]), None)
+            self.pelvis = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["PELVIS"]), None)
 
             
-            self.shoulder_left = next((x for x in data.markers if x.id % 100 == self.joints["SHOULDER_LEFT"]), None)
-            self.shoulder_right = next((x for x in data.markers if x.id % 100 == self.joints["SHOULDER_RIGHT"]), None)
+            self.shoulder_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["SHOULDER_LEFT"]), None)
+            self.shoulder_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["SHOULDER_RIGHT"]), None)
             
-            self.elbow_right = next((x for x in data.markers if x.id % 100 == self.joints["ELBOW_RIGHT"]), None)
-            self.elbow_left = next((x for x in data.markers if x.id % 100 == self.joints["ELBOW_LEFT"]), None)
+            self.elbow_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["ELBOW_RIGHT"]), None)
+            self.elbow_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["ELBOW_LEFT"]), None)
 
-            self.wrist_left = next((x for x in data.markers if x.id % 100 == self.joints["WRIST_LEFT"]), None)
-            self.wrist_right = next((x for x in data.markers if x.id % 100 == self.joints["WRIST_RIGHT"]), None)
+            self.wrist_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["WRIST_LEFT"]), None)
+            self.wrist_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["WRIST_RIGHT"]), None)
 
-            self.hand_right = next((x for x in data.markers if x.id % 100 == self.joints["HAND_RIGHT"]), None)
-            self.hand_left = next((x for x in data.markers if x.id % 100 == self.joints["HAND_LEFT"]), None)
+            self.hand_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["HAND_RIGHT"]), None)
+            self.hand_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["HAND_LEFT"]), None)
              
-            self.knee_right = next((x for x in data.markers if x.id % 100 == self.joints["KNEE_RIGHT"]), None)
-            self.knee_left = next((x for x in data.markers if x.id % 100 == self.joints["KNEE_LEFT"]), None)
+            self.knee_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["KNEE_RIGHT"]), None)
+            self.knee_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["KNEE_LEFT"]), None)
 
-            self.ankle_right = next((x for x in data.markers if x.id % 100 == self.joints["ANKLE_RIGHT"]), None)
-            self.ankle_left = next((x for x in data.markers if x.id % 100 == self.joints["ANKLE_LEFT"]), None)
+            self.ankle_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["ANKLE_RIGHT"]), None)
+            self.ankle_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["ANKLE_LEFT"]), None)
 
-            self.hip_left = next((x for x in data.markers if x.id % 100 == self.joints["HIP_LEFT"]), None)
-            self.hip_right = next((x for x in data.markers if x.id % 100 == self.joints["HIP_RIGHT"]), None)
+            self.hip_left = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["HIP_LEFT"]), None)
+            self.hip_right = next((x for x in data.markers if floor(x.id/100) == id and x.id % 100 == self.joints["HIP_RIGHT"]), None)
             
 
             self.header = self.head.header
