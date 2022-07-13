@@ -94,8 +94,8 @@ def plotting_tool(time, score, base_score, conf, label, file):
     # ax0.plot(time, score, lw=0.8, color=blue, label="Mit Gewichtung nach Konfidenz")
     # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
     # ax0.fill_between(time, score, alpha=0.2)
-    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=0.8, ms=2, color=blue, label="Mit Unsicherheit")    #plot with steps
-    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=0.8, color=red, label="Ohne Unsicherheit")    #plot with steps
+    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Unsicherheit")    #plot with steps
+    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Unsicherheit")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
     
     ax0.set_ylim(ymin=0)
@@ -104,7 +104,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
     # ax1.plot(time, conf, lw=0.8, color=palette[7])
-    ax1.plot(time, conf, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
+    ax1.plot(time, conf, drawstyle='steps-post', lw=1, color=palette[7])    #plot with steps
     
     ax1.set_ylim(ymax=1.05, ymin=0.2)
     
@@ -128,7 +128,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
 def plot_rula():
 
-    rula = np.loadtxt("../data/avg_copy.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
+    rula = np.loadtxt("../data/avg_600.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
     time = rula[:,0]
     time = (time - time[0])     #time relative to first entry
     time = [round(elem, 2) for elem in time]
