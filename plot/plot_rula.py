@@ -15,10 +15,12 @@ def dif_percent(score, base_score, label):
     percent = (counter / len(score)) * 100
     print ('{} : {}%'.format(label, percent))
 
-def averages(score, conf, label):
+def averages(score, base_score, conf, label):
+    """calculate average score, base score and confidence"""
     avg_score = sum(score) / len(score)
+    avg_base = sum(base_score) / len(base_score)
     avg_conf = sum(conf) / len(conf)
-    print ('{} Average : {} {}'.format(label, avg_score, avg_conf))
+    print ('{} Mittelwert : {} {} {}'.format(label, avg_score, avg_base, avg_conf))
 
 def plotting_tool_rula(time, score, base_score, conf, label, file):
     """plot rula score, base score and confidence"""
@@ -29,17 +31,14 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
     red=palette[3]
 
     dif_percent(score, base_score, label)
-    # averages(score, conf, label)
+    #averages(score, base_score, conf, label)
 
     fig = plt.figure(figsize=(17, 8), dpi=100)
     gs = gridspec.GridSpec(2, 1, hspace=0.1)
     ax0 = fig.add_subplot(gs[0])
     
-    # ax0.plot(time, score, lw=0.8, color=blue, label="Mit Gewichtung nach Konfidenz")
-    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
-    # ax0.fill_between(time, score, alpha=0.2)
-    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Unsicherheit")    #plot with steps
-    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Unsicherheit")    #plot with steps
+    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Conf.")    #plot with steps
+    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Conf.")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
     
     ax0.set_ylim(ymin=1, ymax=8)
@@ -47,7 +46,6 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
-    # ax1.plot(time, conf, lw=0.8, color=palette[7])
     ax1.plot(time, conf, drawstyle='steps-post', lw=1, color=palette[7])    #plot with steps
     
     ax1.set_ylim(ymax=1, ymin=0.2)
@@ -86,16 +84,14 @@ def plotting_tool(time, score, base_score, conf, label, file):
             score[i] = int(round(score[i])) 
 
     dif_percent(score, base_score, label)
+    #averages(score, base_score, conf, label)
 
     fig = plt.figure(figsize=(17, 8), dpi=100)
     gs = gridspec.GridSpec(2, 1, hspace=0.1)
     ax0 = fig.add_subplot(gs[0])
     
-    # ax0.plot(time, score, lw=0.8, color=blue, label="Mit Gewichtung nach Konfidenz")
-    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
-    # ax0.fill_between(time, score, alpha=0.2)
-    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Unsicherheit")    #plot with steps
-    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Unsicherheit")    #plot with steps
+    ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Conf.")    #plot with steps
+    ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Conf.")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
     
     ax0.set_ylim(ymin=0)
@@ -103,7 +99,6 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
-    # ax1.plot(time, conf, lw=0.8, color=palette[7])
     ax1.plot(time, conf, drawstyle='steps-post', lw=1, color=palette[7])    #plot with steps
     
     ax1.set_ylim(ymax=1.05, ymin=0.2)
@@ -128,7 +123,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
 def plot_rula():
 
-    rula = np.loadtxt("../data/avg_600.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
+    rula = np.loadtxt("../data/data_for_plot.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
     time = rula[:,0]
     time = (time - time[0])     #time relative to first entry
     time = [round(elem, 2) for elem in time]
