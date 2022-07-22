@@ -112,9 +112,9 @@ def plotting_tool_rula(time, left_score, left_base, left_conf, mid_score, mid_ba
 
 def plot_rula():
 
-    f_left = np.loadtxt("../data/corrected/detail/1_corrected_avg.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
-    f_mid = np.loadtxt("../data/corrected/detail/1_corrected_avg.csv", delimiter=' ', skiprows=1)
-    f_right = np.loadtxt("../data/corrected/detail/1_corrected_avg.csv", delimiter=' ', skiprows=1)
+    f_left = np.loadtxt("../data/1_data_for_plot.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
+    f_mid = np.loadtxt("../data/2_data_for_plot.csv", delimiter=' ', skiprows=1)
+    f_right = np.loadtxt("../data/2_data_for_plot.csv", delimiter=' ', skiprows=1)
     
     
     time = f_left[:,0]
