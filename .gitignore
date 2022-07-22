@@ -6,4 +6,4 @@ data
 plot/*
 !plot/plot_rula.py
 !plot_rula_with_angle.py
-!plot/plot_rula_test.py
+!plot/plot_rula_multi.py
