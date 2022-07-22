@@ -29,9 +29,6 @@ def plotting_tool(time, score, base_score, conf, label, file):
     gs = gridspec.GridSpec(2, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
     
-    # ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
-    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
-    # ax0.fill_between(time, score, alpha=0.2)
     ax0.plot(time, score, '-o', drawstyle='steps-post', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")    #plot with steps
     ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=0.8, color=red, label="Ohne Konfidenz")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
@@ -41,7 +38,6 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
-    # ax1.plot(time, conf, lw=0.8, color=palette[7])
     ax1.plot(time, conf, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
     
     ax1.set_ylim(ymax=1)
@@ -85,9 +81,6 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
     gs = gridspec.GridSpec(3, 1, hspace=0.05)
     ax0 = fig.add_subplot(gs[0])
     
-    # ax0.plot(time, score, '-o', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")
-    # ax0.plot(time, base_score, '--', lw=0.8, color=red, label="Ohne Konfidenz")
-    # ax0.fill_between(time, score, alpha=0.2)
     ax0.plot(time, score, '-o', drawstyle='steps-post', lw=0.8, ms=2, color=blue, label="Mit Gewichtung nach Konfidenz")    #plot with steps
     ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=0.8, color=red, label="Ohne Konfidenz")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
@@ -98,14 +91,12 @@ def plotting_tool_angle(time, score, base_score, conf, angle, label, file):
 
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
-    # ax1.plot(time, conf, lw=0.8, color=palette[7])
     ax1.plot(time, conf, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
     
     ax1.set_ylim(ymax=1.05)
     
     ax2 = fig.add_subplot(gs[2], sharex=ax0)
     
-    # ax2.plot(time, angle, lw=0.8, color=palette[7])
     ax2.plot(time, angle, drawstyle='steps-post', lw=0.8, color=palette[7])    #plot with steps
     
     plt.setp(ax0.get_xticklabels(), visible=False)
