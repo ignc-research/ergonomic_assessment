@@ -10,10 +10,10 @@ from visualization_msgs.msg import MarkerArray
 from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 
 # defines the way confidence is calculated
-# 0: default behaviour. average used through whole process
-# 1: minimum used for all subscores
+# 0: average used through whole process
+# 1: default behaviour. minimum used for all subscores
 # 2: simple average. average confidence of all joints multiplied with rula score
-conf_variant = 0
+conf_variant = 1
 
 # save data to csv file 
 # 0: no (default)
