@@ -10,15 +10,15 @@ from visualization_msgs.msg import MarkerArray
 from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 
 # defines the way confidence is calculated
-# 0: default behaviour. average used through whole process
-# 1: minimum used for all subscores
+# 0: average used through whole process
+# 1: default behaviour. minimum used for all subscores
 # 2: simple average. average confidence of all joints multiplied with rula score
 conf_variant = 1
 
 # save data to csv file 
 # 0: no (default)
 # 1: yes
-save_data = 0 
+save_data = 0
 
 def angle_relative(a, b, c, d, adjust):
     """return angle between two vectors"""
@@ -456,7 +456,7 @@ class Ergonomy():
             #put scores through tables to get the final RULA score
             a = table_a(max(self.lower_arm_left.score, self.lower_arm_right.score, 1), max(self.wrist_left.score, self.wrist_right.score, 1), max(self.upper_arm_left.score, self.upper_arm_right.score, 1))
             a_base = table_a(max(self.lower_arm_left.base_score, self.lower_arm_right.base_score, 1), max(self.wrist_left.base_score, self.wrist_right.base_score, 1), max(self.upper_arm_left.base_score, self.upper_arm_right.base_score, 1))
-            a_conf = calc_conf_avg([self.lower_arm_left.confidence, self.lower_arm_right.confidence, self.wrist_left.confidence, self.wrist_right.confidence, self.upper_arm_left.confidence, self.upper_arm_right.confidence])
+            a_conf = calc_conf_avg([self.lower_arm_left.confidence, self.lower_arm_right.confidence, self.upper_arm_left.confidence, self.upper_arm_right.confidence])      #confidence of both wrists not included since they always return 1
             self.score_a = Score(a, a_conf, a_base, None)
             b = table_b(max(self.neck.score, 1), max(self.legs.score, 1), max(self.trunk.score, 1))
             b_base = table_b(max(self.neck.base_score, 1), max(self.legs.base_score, 1), max(self.trunk.base_score, 1))
@@ -464,11 +464,11 @@ class Ergonomy():
             self.score_b = Score(b, b_conf, b_base, None)
             self.rula_score = Score(table_c(self.score_a.score, self.score_b.score), calc_conf_avg([self.score_a.confidence, self.score_b.confidence]), table_c(self.score_a.base_score, self.score_b.base_score), None)
 
-            if (conf_variant == 2):
+            if (conf_variant == 2):     #confidence of both wrists not included since they always return 1
                 conf_simple_avg = calc_conf_avg([get_conf(hip_left), get_conf(hip_right), get_conf(shoulder_left), get_conf(shoulder_right), get_conf(pelvis), 
                                             get_conf(spine_chest), get_conf(neck), get_conf(head), get_conf(nose), get_conf(ear_left), get_conf(ear_right),
                                             get_conf(knee_left), get_conf(knee_right), get_conf(ankle_left), get_conf(ankle_right), get_conf(elbow_left), get_conf(elbow_right), 
-                                            get_conf(wrist_left), get_conf(wrist_right), get_conf(hand_left), get_conf(hand_right)])
+                                            get_conf(hand_left), get_conf(hand_right)])
                 self.rula_score.score = int(round(self.rula_score.base_score * conf_simple_avg))
                 self.rula_score.confidence = conf_simple_avg
 
