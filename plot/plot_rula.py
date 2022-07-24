@@ -26,9 +26,17 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
     """plot rula score, base score and confidence"""
     sns.set_style("whitegrid")
 
+    # x values for vertical lines
+    # first = 1 
+    # second = 2
+    # third = 3
+
+
     palette = sns.color_palette("muted")
+    palette1 = sns.color_palette("deep")
     blue = palette[0]
     red=palette[3]
+    green = palette1[2]
 
     dif_percent(score, base_score, label)
     #averages(score, base_score, conf, label)
@@ -40,6 +48,9 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
     ax0.plot(time, score, '-o', drawstyle='steps-post', lw=1, ms=2, color=blue, label="Mit Conf.")    #plot with steps
     ax0.plot(time, base_score, '--', drawstyle='steps-post', lw=1, color=red, label="Ohne Conf.")    #plot with steps
     ax0.fill_between(time, score, step='post', alpha=0.2)    #plot with steps
+    # ax0.axvline(first, lw=2, color=green)
+    # ax0.axvline(second, lw=2, color=green)
+    # ax0.axvline(third, lw=2, color=green)
     
     ax0.set_ylim(ymin=1, ymax=8)
     ax0.legend(loc="upper left", fontsize=14)
@@ -47,6 +58,9 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     
     ax1.plot(time, conf, drawstyle='steps-post', lw=1, color=palette[7])    #plot with steps
+    # ax1.axvline(first, lw=2, color=green)
+    # ax1.axvline(second, lw=2, color=green)
+    # ax1.axvline(third, lw=2, color=green)
     
     ax1.set_ylim(ymax=1, ymin=0.2)
     
@@ -66,7 +80,7 @@ def plotting_tool_rula(time, score, base_score, conf, label, file):
 
     ax0.margins(x=0)
 
-    fig.savefig(file + '.png', bbox_inches='tight')
+    fig.savefig(file + '.pdf', bbox_inches='tight')
 
 def plotting_tool(time, score, base_score, conf, label, file):
     """plot individual score, base score and confidence"""
@@ -119,7 +133,7 @@ def plotting_tool(time, score, base_score, conf, label, file):
 
     ax0.margins(x=0)
 
-    fig.savefig(file + '.png', bbox_inches='tight')
+    fig.savefig(file + '.pdf', bbox_inches='tight')
 
 def plot_rula():
 

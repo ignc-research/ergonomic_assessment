@@ -25,13 +25,19 @@ def plotting_tool_rula(time, left_score, left_base, left_conf, mid_score, mid_ba
     sns.set_style("whitegrid")
 
     palette = sns.color_palette("muted")
+    palette1 = sns.color_palette("deep")
     blue = palette[0]
     red=palette[3]
+    green = palette1[2]
 
     marker_size = 4
     line_width = 2
     font_size_plot = 14
     font_size_label = 16
+    
+    # x value for vertical line
+    vertical_line = 1
+
     # dif_percent(score, base_score, label)
     # averages(score, conf, label)
 
@@ -42,6 +48,7 @@ def plotting_tool_rula(time, left_score, left_base, left_conf, mid_score, mid_ba
     ax0.plot(time, left_score, '-o', drawstyle='steps-post', lw=line_width, ms=marker_size, color=blue, label="Mit Conf.")    #plot with steps
     ax0.plot(time, left_base, '--', drawstyle='steps-post', lw=line_width, color=red, label="Ohne Conf.")    #plot with steps
     ax0.fill_between(time, left_score, step='post', alpha=0.2)    #plot with steps
+    # ax0.axvline(vertical_line, lw=line_width, color=green)
     ax0.set_ylim(ymin=1, ymax=8)
     ax0.legend(loc="upper left", fontsize=font_size_plot)
 
@@ -49,24 +56,29 @@ def plotting_tool_rula(time, left_score, left_base, left_conf, mid_score, mid_ba
     ax2.plot(time, mid_score, '-o', drawstyle='steps-post', lw=line_width, ms=marker_size, color=blue, label="Mit Conf.")    #plot with steps
     ax2.plot(time, mid_base, '--', drawstyle='steps-post', lw=line_width, color=red, label="Ohne Conf.")    #plot with steps
     ax2.fill_between(time, mid_score, step='post', alpha=0.2)    #plot with steps
+    # ax2.axvline(vertical_line, lw=line_width, color=green)
     ax2.set_ylim(ymin=1, ymax=8)
 
     ax4 = fig.add_subplot(gs[0,2])
     ax4.plot(time, right_score, '-o', drawstyle='steps-post', lw=line_width, ms=marker_size, color=blue, label="Mit Conf.")    #plot with steps
     ax4.plot(time, right_base, '--', drawstyle='steps-post', lw=line_width, color=red, label="Ohne Conf.")    #plot with steps
     ax4.fill_between(time, right_score, step='post', alpha=0.2)    #plot with steps
+    # ax4.axvline(vertical_line, lw=line_width, color=green)
     ax4.set_ylim(ymin=1, ymax=8)
 
     ax1 = fig.add_subplot(gs[1,0], sharex=ax0)
     ax1.plot(time, left_conf, drawstyle='steps-post', lw=line_width, color=palette[7])    #plot with steps
+    # ax1.axvline(vertical_line, lw=line_width, color=green)
     ax1.set_ylim(ymax=1, ymin=0.2)
 
     ax3 = fig.add_subplot(gs[1,1], sharex=ax2)
     ax3.plot(time, mid_conf, drawstyle='steps-post', lw=line_width, color=palette[7])    #plot with steps
+    # ax3.axvline(vertical_line, lw=line_width, color=green)
     ax3.set_ylim(ymax=1, ymin=0.2)
 
     ax5 = fig.add_subplot(gs[1,2], sharex=ax3)
     ax5.plot(time, right_conf, drawstyle='steps-post', lw=line_width, color=palette[7])    #plot with steps
+    # ax5.axvline(vertical_line, lw=line_width, color=green)
     ax5.set_ylim(ymax=1, ymin=0.2)
     
     plt.setp(ax0.get_xticklabels(), visible=False)
@@ -108,13 +120,13 @@ def plotting_tool_rula(time, left_score, left_base, left_conf, mid_score, mid_ba
     ax4.margins(x=0)
 
 
-    fig.savefig(file + '.png', bbox_inches='tight')
+    fig.savefig(file + '.pdf', bbox_inches='tight')
 
 def plot_rula():
 
     f_left = np.loadtxt("../data/1_data_for_plot.csv", delimiter=' ', skiprows=1)      #load data from path and skip first row that contains entry names
     f_mid = np.loadtxt("../data/2_data_for_plot.csv", delimiter=' ', skiprows=1)
-    f_right = np.loadtxt("../data/2_data_for_plot.csv", delimiter=' ', skiprows=1)
+    f_right = np.loadtxt("../data/3_data_for_plot.csv", delimiter=' ', skiprows=1)
     
     
     time = f_left[:,0]
