@@ -9,8 +9,8 @@ from std_msgs.msg import Header, Float32MultiArray
 
 class Skeleton():
     def __init__(self):
-        rospy.Subscriber("/kinect2/body_tracking_data", MarkerArray, self.callbackMarkerArray)  # raw kinect joints
-        rospy.Subscriber("/ergonomics/rula", Float32MultiArray, self.callbackFloat32MultiArray) # calculated RULA scores
+        rospy.Subscriber("/kinect2/body_tracking_data", MarkerArray, self.callbackMarkerArray, queue_size=1)  # raw kinect joints
+        rospy.Subscriber("/ergonomics/rula", Float32MultiArray, self.callbackFloat32MultiArray, queue_size=1) # calculated RULA scores
         self.pubSkeleton = rospy.Publisher('/ergonomics/skeleton', MarkerArray, queue_size=1)   # skeleton visualization
 
         #https://docs.microsoft.com/en-us/azure/kinect-dk/body-joints
@@ -51,9 +51,9 @@ class Skeleton():
 
     def colorToConfidence(self, color):
         if color.r == 1.0:
-            confidence = 0.0
-        elif color.b == 1.0:
             confidence = 0.1
+        elif color.b == 1.0:
+            confidence = 0.25
         else:
             confidence = 1.0
         return confidence
@@ -94,11 +94,7 @@ class Skeleton():
         listMsg.color.g = color[1]
         listMsg.color.b = color[2]
         K = min(self.colorToConfidence(joint1.color),self.colorToConfidence(joint2.color))  # transparency = min confidence value
-        if K < 1:
-            transparency = 0.25
-        else:
-            transparency = 1.0
-        listMsg.color.a = transparency
+        listMsg.color.a = K
 
         listMsg.points = [joint1.pose.position, joint2.pose.position]
 
@@ -116,7 +112,8 @@ class Skeleton():
         listMsg.type = 9
         listMsg.scale.z = scale
         listMsg.pose.orientation.w = 1.0
-        listMsg.lifetime.nsecs = 250000000
+        listMsg.lifetime.secs = 10
+        listMsg.lifetime.nsecs = 0
 
         # color = REBA Score
         listMsg.color.r = color[0]
@@ -177,6 +174,8 @@ class Skeleton():
             
 
             self.header = self.head.header
+
+            self.publishSkeleton()
 
 
     def callbackFloat32MultiArray(self,data):
@@ -243,11 +242,10 @@ class Skeleton():
 
 
 def start():
-    rospy.init_node('Skeleton', anonymous=True)
+    rospy.init_node('Skeleton', anonymous=False)
     node = Skeleton()
-    r = rospy.Rate(10) # 10hz?
+    r = rospy.Rate(10)
     while not rospy.is_shutdown():
-        node.publishSkeleton()
         r.sleep()
 
 

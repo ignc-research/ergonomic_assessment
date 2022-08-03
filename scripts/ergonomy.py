@@ -472,7 +472,7 @@ class Ergonomy():
                 self.rula_score.score = int(round(self.rula_score.base_score * conf_simple_avg))
                 self.rula_score.confidence = conf_simple_avg
 
-            print("Score: {} Base: {} Confidence: {}".format(self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence))
+            #print("Score: {} Base: {} Confidence: {}".format(self.rula_score.score, self.rula_score.base_score, self.rula_score.confidence))
 
             if (save_data == 1):
                 time = pelvis.header.stamp.secs + pelvis.header.stamp.nsecs * 10**-9
@@ -497,7 +497,7 @@ class Ergonomy():
             self.pub_joint_angles.publish(joint_angle_msg)
 
 def ergonomy_start():
-    rospy.init_node('Ergonomy', anonymous=True)
+    rospy.init_node('Ergonomy', anonymous=False)
     process = Ergonomy()
     rospy.spin()
 
